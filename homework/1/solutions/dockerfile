@@ -1,9 +1,16 @@
 FROM continuumio/anaconda3
 
 # example call of docker RUN command see more at: https://docs.docker.com/engine/reference/builder/
-RUN apt-get update --fix-missing && apt-get install -y g++ gcc htop
+# RUN apt-get update --fix-missing && apt-get install -y g++ gcc htop
 
 # need do the following
 # clone spinning up
+RUN git clone https://github.com/openai/spinningup.git
+WORKDIR ./spinningup
+
 # install dependencies for spinning up
+RUN apt-get -y update && apt-get -y install libopenmpi-dev
+RUN pip install -e .
 # install spinning up using pip
+
+CMD ["python", "-m" "spinup.run", "ppo", "--env", "CartPole-v1", "--exp_name", "cartpole"]
